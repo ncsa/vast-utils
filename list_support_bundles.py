@@ -37,6 +37,12 @@ def parse_options( argv ):
                          action = 'store',
                          help = "Credentials File. Default: %(default)s" )
 
+    parser.add_argument( "--verbose", "-v",
+                         dest = "verbose",
+                         default = False,
+                         action = 'store_true',
+                         help = "Execute in verbose mode. This is VERY verbose. Default: %(default)s")
+
     parser.add_argument( "--debug",
                          dest = "debug",
                          default = False,
@@ -61,9 +67,13 @@ if __name__ == '__main__':
    bundles = V.supportbundles.get()
 
    if bundles:
-      print( f"{'Id':>3}  {'Timestamp':19}  {'Bundle Filename':70}  {'Bundle Size':>15}" )
+      if options.verbose == False:
+         print( f"{'Id':>3}  {'Timestamp':19}  {'Bundle Filename':70}  {'Bundle Size':>15}" )
       for bundle in  bundles:
-          print( f"{bundle['id']:3}  {bundle['create_datetime']:19}  {bundle['bundle_file']:70}  {human_readable(bundle['bundle_size']):>15}" )
+          if options.verbose:
+             pprint.pprint( bundle )
+          else:
+             print( f"{bundle['id']:3}  {bundle['create_datetime']:19}  {bundle['bundle_file']:70}  {human_readable(bundle['bundle_size']):>15}" )
    else:
       print(f"There are no support bundles on the system.")
 
